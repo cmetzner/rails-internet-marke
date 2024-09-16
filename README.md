@@ -53,4 +53,4 @@ init api client
 
 # LICENSE
 
-See [LICENSE](LICENSE).
+See [LICENSE](LICENSE.txt).
