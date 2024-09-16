@@ -9,7 +9,8 @@ module InternetMarke
     @@auth_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/user"
     @@api_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/"
     @@profile_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/user/profile"
-    @@wallet_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/app/wallet?amount="
+    @@put_wallet_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/app/wallet?amount="
+    @@get_wallet_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/app/wallet?amount=0"
     @@init_shopping_cart_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/app/shoppingcart"
     @@create_order_png_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/app/shoppingcart/png"
     @@create_order_pdf_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/app/shoppingcart/pdf"
@@ -22,7 +23,7 @@ module InternetMarke
 
       self.check_api_version
       if @apiVersion == @@api_version
-        self.generate_auth_token
+        @authToken = self.generate_auth_token
       else
         raise "selected api version #{@apiVersion} is not supported"
       end
@@ -61,7 +62,7 @@ module InternetMarke
       @response = JSON.parse @request.read_body
       if @response
         if @response["access_token"]
-          @authToken = @response["access_token"]
+          return @response["access_token"]
         else
           raise "authorization failed. no access token generated"
         end
@@ -108,7 +109,22 @@ module InternetMarke
 
     def put_wallet(amount)
       if @authToken
-        url = URI(@@wallet_url + amount.to_s)
+        url = URI(@@put_wallet_url + amount.to_s)
+        http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = true
+
+        request = Net::HTTP::Put.new(url)
+        request["Authorization"] = "Bearer " + @authToken
+
+        @request = http.request(request)
+
+        return JSON.parse @request.read_body
+      end
+    end
+
+    def get_wallet
+      if @authToken
+        url = URI(@@get_wallet_url)
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
 

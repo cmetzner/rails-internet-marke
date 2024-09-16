@@ -14,7 +14,7 @@ Gem for use Deutsche Post REST Api in Ruby - Deutsche Post Api https://developer
 ## Installation
 Add this line to your application's Gemfile:
 
-    gem 'rails-InternetMarke', :git => 'https://github.com/cmetzner/rails-internet-marke'
+    gem 'rails-internet-marke', :git => 'https://github.com/cmetzner/rails-internet-marke'
 
 And then execute:
 
@@ -33,6 +33,14 @@ init api client
   ```
   ```ruby
 => {"ekp"=>"7000030580", "company"=>nil, "title"=>nil, "invoiceType"=>"PAPER", "invoiceFrequency"=>"DECADE", "mail"=>"testpk_1045@dhldp-test.de", "firstname"=>"Max", "lastname"=>"Tester 1045", "street"=>"Teststraße", "houseNo"=>"1045", "zip"=>"11045", "city"=>"ZTEST_Ort_001045", "country"=>"DEU", "phone"=>"12341045", "pobox"=>nil, "poboxZip"=>nil, "poboxCity"=>nil}
+  ```
+
+### call wallet amount
+  ```ruby
+  client.get_wallet
+  ```
+  ```ruby
+=> {"shopOrderId"=>"1161167596", "walletBalance"=>0}
   ```
 
 ### charge wallet with 10€
