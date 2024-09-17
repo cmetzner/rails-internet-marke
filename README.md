@@ -20,6 +20,10 @@ And then execute:
 
     $ bundle install
 
+Add this line to your config/application.rb:
+
+    require 'internet_marke'
+
 ## Usage
 
 init api client
