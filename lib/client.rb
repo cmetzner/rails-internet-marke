@@ -60,7 +60,6 @@ module InternetMarke
 
       @request = http.request(request)
       @response = JSON.parse @request.read_body
-      Rails.logger.info(@response["access_token"])
       if @response
         if @response["access_token"]
           return @response["access_token"]
