@@ -2,6 +2,13 @@
 
 Gem for use Deutsche Post REST Api in Ruby - Deutsche Post Api https://developer.dhl.com/api-reference/deutsche-post-internetmarke-post-paket-deutschland#get-started-section/
 
+## Requirements
+* DHL Developer account (https://developer.dhl.com)
+  * API Key --> Client::client_id
+  * API Secret --> Client::client_secret
+* credentials for Deutsche Post Portokasse (https://portokasse.deutschepost.de)
+  * email --> Client::username
+  * password --> Client::password
 
 ## Functionality
 * Get information about the used REST Api version.
@@ -14,7 +21,7 @@ Gem for use Deutsche Post REST Api in Ruby - Deutsche Post Api https://developer
 ## Installation
 Add this line to your application's Gemfile:
 
-    gem 'rails-internet-marke', :git => 'https://github.com/cmetzner/rails-internet-marke'
+    gem 'rails-internet-marke'
 
 And then execute:
 
@@ -36,7 +43,7 @@ init api client
   client.get_profile()
   ```
   ```ruby
-=> {"ekp"=>"7000030580", "company"=>nil, "title"=>nil, "invoiceType"=>"PAPER", "invoiceFrequency"=>"DECADE", "mail"=>"testpk_1045@dhldp-test.de", "firstname"=>"Max", "lastname"=>"Tester 1045", "street"=>"Teststraße", "houseNo"=>"1045", "zip"=>"11045", "city"=>"ZTEST_Ort_001045", "country"=>"DEU", "phone"=>"12341045", "pobox"=>nil, "poboxZip"=>nil, "poboxCity"=>nil}
+=> {"ekp"=>"************", "company"=>nil, "title"=>nil, "invoiceType"=>"PAPER", "invoiceFrequency"=>"DECADE", "mail"=>"********@dhldp-test.de", "firstname"=>"Max", "lastname"=>"Tester 1045", "street"=>"Teststraße", "houseNo"=>"1045", "zip"=>"11045", "city"=>"ZTEST_Ort_001045", "country"=>"DEU", "phone"=>"12341045", "pobox"=>nil, "poboxZip"=>nil, "poboxCity"=>nil}
   ```
 
 ### call wallet amount
@@ -64,5 +71,6 @@ init api client
   ```
 
 # LICENSE
+rails-internet-marke is licensed under the MIT license, see the [LICENSE](LICENSE.txt) file for details. 
 
-See [LICENSE](LICENSE.txt).
+Pull requests are welcome!

@@ -4,7 +4,7 @@ module InternetMarke
     mattr_accessor :client_id, :client_secret, :username, :password
 
     @@auth_type = "client_credentials"
-    @@api_version = "v1.1.14"
+    @@api_version = ["v1.1.14", "v1.1.16"]
 
     @@auth_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/user"
     @@api_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/"
@@ -22,7 +22,7 @@ module InternetMarke
       @password = password
 
       self.check_api_version
-      if @apiVersion == @@api_version
+      if @@api_version.include?(@apiVersion)
         @authToken = self.generate_auth_token
       else
         raise "selected api version #{@apiVersion} is not supported"
@@ -42,7 +42,7 @@ module InternetMarke
       @request = http.request(request)
       @response = JSON.parse @request.read_body
 
-      @apiVersion = @response["amp"]["version"]
+      @apiVersion = @response["amp"]["version"].present? ? @response["amp"]["version"] : "undefined"
     end
 
     def generate_auth_token
@@ -60,14 +60,15 @@ module InternetMarke
 
       @request = http.request(request)
       @response = JSON.parse @request.read_body
+      Rails.logger.info(@response["access_token"])
       if @response
         if @response["access_token"]
           return @response["access_token"]
         else
-          raise "authorization failed. no access token generated"
+          raise "authorization failed. no access token generated: #{@response}"
         end
       else
-        raise "authorization failed"
+        raise "authorization request failed: #{@response}"
       end
     end
 
@@ -102,7 +103,7 @@ module InternetMarke
         if @response["shopOrderId"]
           @shoppingOrderId = @response["shopOrderId"]
         else
-          raise "no shopOrderId generated"
+          raise "no shopOrderId generated: #{@response}"
         end
       end
     end
@@ -137,7 +138,7 @@ module InternetMarke
       end
     end
 
-    def buy(quantity, product, price)
+    def buy(quantity, productCode, productPrice)
       self.init_shopping_cart
 
       if @authToken && @shoppingOrderId
@@ -152,7 +153,7 @@ module InternetMarke
 
         positions = Array.new
         position = {
-          "productCode": product,
+          "productCode": productCode,
           "imageID": 0,
           "additionalInfo": "",
           "voucherLayout": "ADDRESS_ZONE",
@@ -163,11 +164,11 @@ module InternetMarke
           positions.push(position)
         end
 
-        @amount = (price * 100).to_i
+        amount = quantity * (productPrice * 100).to_i
         bodyParams = {
           "type": "AppShoppingCartPNGRequest",
           "shopOrderId": @shoppingOrderId,
-          "total": quantity * @amount,
+          "total": amount,
           "createManifest": true,
           "dpi": "DPI300",
           "optimizePNG": true,
