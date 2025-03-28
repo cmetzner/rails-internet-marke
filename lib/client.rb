@@ -4,7 +4,7 @@ module InternetMarke
     mattr_accessor :client_id, :client_secret, :username, :password
 
     @@auth_type = "client_credentials"
-    @@api_version = ["v1.1.14", "v1.1.16"]
+    @@api_version = ["v1.1.14", "v1.1.16", "v1.1.18"]
 
     @@auth_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/user"
     @@api_url = "https://api-eu.dhl.com/post/de/shipping/im/v1/"
